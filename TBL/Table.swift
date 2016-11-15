@@ -1,7 +1,7 @@
 /// Types
 public typealias AnyUIViewClass = UIView.Type
 public typealias AnyUITableViewCellClass = UITableViewCell.Type
-public typealias SectionCountProvider = Void -> Int
+public typealias SectionCountProvider = (Void) -> Int
 
 
 /// Provides sections to be displayed in a table
@@ -10,7 +10,7 @@ protocol SectionProvider {
     var cellClasses: [AnyUITableViewCellClass] { get }
     var sectionCount: Int { get }
 
-    func sectionAtIndex(index: Int) -> Section
+    func sectionAtIndex(_ index: Int) -> Section
 }
 
 /// Provides rows to be displayed in a table
@@ -19,7 +19,7 @@ protocol RowProvider {
     var cellClasses: [AnyUITableViewCellClass] { get }
     var rowCount: Int { get }
 
-    func rowAtIndex(index: Int) -> Row
+    func rowAtIndex(_ index: Int) -> Row
 }
 
 /// Describes a section of a table
@@ -28,7 +28,7 @@ protocol Section {
     var rowCount: Int { get }
     var header: Header? { get }
 
-    func rowAtIndex(index: Int) -> Row
+    func rowAtIndex(_ index: Int) -> Row
 }
 
 /// Describes a row in a table
@@ -37,7 +37,7 @@ protocol Row {
     var cellClass: AnyUITableViewCellClass { get }
     var height: CGFloat { get }
 
-    func customizeCell(cell: UITableViewCell)
+    func customizeCell(_ cell: UITableViewCell)
     func didSelectRow()
 }
 
@@ -46,19 +46,19 @@ protocol Header {
     var height: CGFloat { get }
 
     func createHeader() -> UIView
-    func customizeHeader(headerView: UIView)
+    func customizeHeader(_ headerView: UIView)
 }
 
 /// Describes a table
-public class Table {
+open class Table {
 
-    private var sectionProviders = [SectionProvider]()
-    private var dataSourceDelegate: TableViewDataSourceDelegate?
+    fileprivate var sectionProviders = [SectionProvider]()
+    fileprivate var dataSourceDelegate: TableViewDataSourceDelegate?
 
     public init() {}
 
     /// Adds a single section to this table
-    public func addSection() -> SingleSectionDescriptor {
+    open func addSection() -> SingleSectionDescriptor {
         let section = SingleSectionDescriptor()
         sectionProviders.append(section)
         return section
@@ -67,13 +67,13 @@ public class Table {
     /// Adds multiple sections to this table
     /// The result of sectionCountProvider must be consistent,
     /// if the result will change, call reloadData() on the UITableView
-    public func addSections(sectionCount: SectionCountProvider) -> MultipleSectionDescriptor {
+    open func addSections(_ sectionCount: @escaping SectionCountProvider) -> MultipleSectionDescriptor {
         let section = MultipleSectionDescriptor(sectionCountProvider: sectionCount)
         sectionProviders.append(section)
         return section
     }
 
-    public func attachToTableView(tableView: UITableView) {
+    open func attachToTableView(_ tableView: UITableView) {
         dataSourceDelegate = TableViewDataSourceDelegate(sectionProvider: self)
         cellClasses.forEach(tableView.registerClassForCellReuse)
         tableView.dataSource = dataSourceDelegate
@@ -91,7 +91,7 @@ extension Table: SectionProvider {
         return sectionProviders.reduce(0) { $0 + $1.sectionCount }
     }
 
-    func sectionAtIndex(index: Int) -> Section {
+    func sectionAtIndex(_ index: Int) -> Section {
         var currentSection = 0
         for sectionProvider in sectionProviders {
             let sectionStartIndex = currentSection

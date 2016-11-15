@@ -1,29 +1,29 @@
 ///
 public enum When<T> {
-    case Always
-    case If(T -> Bool)
-    case Never
+    case always
+    case `if`((T) -> Bool)
+    case never
 }
 
 internal extension When {
 
-    func evaluate(value: T) -> Bool {
+    func evaluate(_ value: T) -> Bool {
         switch self {
-        case .Always: return true
-        case .If(let handler): return handler(value)
-        case .Never: return false
+        case .always: return true
+        case .if(let handler): return handler(value)
+        case .never: return false
         }
     }
 }
 
 enum Provider<T, I> {
-    case Static(T)
-    case Dynamic(I -> T)
+    case `static`(T)
+    case dynamic((I) -> T)
 
-    func value(input: I) -> T {
+    func value(_ input: I) -> T {
         switch self {
-        case .Static(let value): return value
-        case .Dynamic(let provider): return provider(input)
+        case .static(let value): return value
+        case .dynamic(let provider): return provider(input)
         }
     }
 }
