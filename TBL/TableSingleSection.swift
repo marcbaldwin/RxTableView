@@ -10,20 +10,20 @@ protocol SingleSectionRowDelegate {
 }
 
 /// Describes a single section of a table
-open class SingleSectionDescriptor {
+public class SingleSectionDescriptor {
 
     var header: Header? = nil
     fileprivate var rowProviders = [RowProvider]()
 
     /// Adds a single row to this section
-    open func addRow<C: UITableViewCell>(_ cellClass: C.Type, customizer: @escaping (C) -> Void) -> SingleSectionRow<C> {
+    public func addRow<C: UITableViewCell>(_ cellClass: C.Type, customizer: @escaping (C) -> Void) -> SingleSectionRow<C> {
         let row = SingleSectionRow(cellClass: cellClass, customizer: customizer)
         rowProviders.append(row)
         return row
     }
 
     /// Adds a row for each of the items returned by the array provider
-    open func addRowForEach<C: UITableViewCell, T>(_ provider: @escaping (Void) -> [T], cellClass: C.Type, customizer: @escaping (T, C) -> Void) -> SingleSectionRows<C, T> {
+    public func addRowForEach<C: UITableViewCell, T>(_ provider: @escaping (Void) -> [T], cellClass: C.Type, customizer: @escaping (T, C) -> Void) -> SingleSectionRows<C, T> {
         let row = SingleSectionRows(itemProvider: provider, cellClass: cellClass, customizer: customizer)
         rowProviders.append(row)
         return row
@@ -63,7 +63,7 @@ extension SingleSectionDescriptor: Section {
 
 // MARK: Single Row
 
-open class SingleSectionRow<C: UITableViewCell>  {
+public class SingleSectionRow<C: UITableViewCell>  {
 
     let cellClass: AnyUITableViewCellClass
     fileprivate let customizer: (C) -> Void
@@ -76,22 +76,22 @@ open class SingleSectionRow<C: UITableViewCell>  {
         self.customizer = customizer
     }
 
-    open func withHeight(_ height: @escaping (Void) -> CGFloat) -> SingleSectionRow {
+    @discardableResult public func with(height: @escaping (Void) -> CGFloat) -> SingleSectionRow {
         self.heightProvider = .dynamic(height)
         return self
     }
 
-    open func withHeight(_ height: CGFloat) -> SingleSectionRow {
+    @discardableResult public func with(height: CGFloat) -> SingleSectionRow {
         self.heightProvider = .static(height)
         return self
     }
 
-    open func onSelect(_ handler: @escaping (Void) -> Void) -> SingleSectionRow {
+    @discardableResult public func onSelect(_ handler: @escaping (Void) -> Void) -> SingleSectionRow {
         self.onSelect = handler
         return self
     }
 
-    open func visible(_ clause: When<Void>) -> SingleSectionRow {
+    @discardableResult public func visible(_ clause: When<Void>) -> SingleSectionRow {
         self.visible = clause
         return self
     }
@@ -121,7 +121,7 @@ extension SingleSectionRow: Row {
 
 // MARK: Multiple Rows
 
-open class SingleSectionRows<C: UITableViewCell, T> {
+public class SingleSectionRows<C: UITableViewCell, T> {
 
     let cellClass: AnyUITableViewCellClass
     fileprivate let itemProvider: (Void) -> [T]
@@ -135,12 +135,12 @@ open class SingleSectionRows<C: UITableViewCell, T> {
         self.customizer = customizer
     }
 
-    open func withHeight(_ height: @escaping (Int) -> CGFloat) -> SingleSectionRows {
+    @discardableResult public func with(height: @escaping (Int) -> CGFloat) -> SingleSectionRows {
         self.height = .dynamic(height)
         return self
     }
 
-    open func onSelect(_ handler: @escaping (T) -> Void) -> SingleSectionRows {
+    @discardableResult public func onSelect(_ handler: @escaping (T) -> Void) -> SingleSectionRows {
         self.onSelect = handler
         return self
     }

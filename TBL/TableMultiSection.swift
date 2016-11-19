@@ -1,6 +1,6 @@
 
 /// Describes multiple but identical sections of a table
-open class MultipleSectionDescriptor {
+public class MultipleSectionDescriptor {
 
     fileprivate let sectionCountProvider: SectionCountProvider
     fileprivate var rows = [AnyMultipleSectionRow]()
@@ -11,14 +11,14 @@ open class MultipleSectionDescriptor {
     }
 
     /// Adds a single row to this section
-    open func addRow<T: UITableViewCell>(_ cellClass: T.Type, customizer: @escaping (Int, T) -> Void) -> MultipleSectionRow<T> {
+    public func addRow<T: UITableViewCell>(_ cellClass: T.Type, customizer: @escaping (Int, T) -> Void) -> MultipleSectionRow<T> {
         let row = MultipleSectionRow(cellClass: cellClass, customizer: customizer)
         rows.append(row)
         return row
     }
 
     /// Adds a header to this section
-    open func addHeader<H: UIView>(_ factory: @escaping (Void) -> H, customizer: @escaping (Int, H) -> Void) -> MultipleSectionHeader {
+    public func addHeader<H: UIView>(_ factory: @escaping (Void) -> H, customizer: @escaping (Int, H) -> Void) -> MultipleSectionHeader {
         let header = MultipleSectionHeader(factory: factory) { index, cell in
             customizer(index, cell as! H)
         }
@@ -85,7 +85,7 @@ protocol AnyMultipleSectionRow {
 }
 
 /// Row Descriptor
-open class MultipleSectionRow<T: UITableViewCell> {
+public class MultipleSectionRow<T: UITableViewCell> {
 
     let cellClass: AnyUITableViewCellClass
     let customizer: (Int, T) -> Void
@@ -96,11 +96,11 @@ open class MultipleSectionRow<T: UITableViewCell> {
         self.customizer = customizer
     }
 
-    open func withHeight(_ height: @escaping (Int) -> CGFloat) {
+    public func with(height: @escaping (Int) -> CGFloat) {
         self.height = .dynamic(height)
     }
 
-    open func withHeight(_ height: CGFloat) {
+    public func with(height: CGFloat) {
         self.height = .static(height)
     }
 }
@@ -143,7 +143,7 @@ extension RowProxy: Row {
     }
 }
 
-open class MultipleSectionHeader {
+public class MultipleSectionHeader {
 
     let factory: (Void) -> UIView
     let customizer: (Int, UIView) -> Void
@@ -154,11 +154,11 @@ open class MultipleSectionHeader {
         self.customizer = customizer
     }
 
-    open func withHeight(_ height: @escaping (Int) -> CGFloat) {
+    public func with(height: @escaping (Int) -> CGFloat) {
         self.height = .dynamic(height)
     }
 
-    open func withHeight(_ height: CGFloat) {
+    public func with(height: CGFloat) {
         self.height = .static(height)
     }
 }
