@@ -16,14 +16,14 @@ public class SingleSectionDescriptor {
     fileprivate var rowProviders = [RowProvider]()
 
     /// Adds a single row to this section
-    public func addRow<C: UITableViewCell>(_ cellClass: C.Type, customizer: @escaping (C) -> Void) -> SingleSectionRow<C> {
+    @discardableResult public func addRow<C: UITableViewCell>(_ cellClass: C.Type, customizer: @escaping (C) -> Void) -> SingleSectionRow<C> {
         let row = SingleSectionRow(cellClass: cellClass, customizer: customizer)
         rowProviders.append(row)
         return row
     }
 
     /// Adds a row for each of the items returned by the array provider
-    public func addRowForEach<C: UITableViewCell, T>(_ provider: @escaping (Void) -> [T], cellClass: C.Type, customizer: @escaping (T, C) -> Void) -> SingleSectionRows<C, T> {
+    @discardableResult public func addRowForEach<C: UITableViewCell, T>(_ provider: @escaping (Void) -> [T], cellClass: C.Type, customizer: @escaping (T, C) -> Void) -> SingleSectionRows<C, T> {
         let row = SingleSectionRows(itemProvider: provider, cellClass: cellClass, customizer: customizer)
         rowProviders.append(row)
         return row
