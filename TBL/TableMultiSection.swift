@@ -1,4 +1,6 @@
 
+public typealias Path = (section: Int, row: Int)
+
 /// Describes multiple but identical sections of a table
 public class MultipleSectionDescriptor {
 
@@ -11,8 +13,16 @@ public class MultipleSectionDescriptor {
     }
 
     /// Adds a single row to this section
-    @discardableResult public func addRow<T: UITableViewCell>(_ cellClass: T.Type, customizer: @escaping (Int, T) -> Void) -> MultipleSectionRow<T> {
-        let row = MultipleSectionRow(cellClass: cellClass, customizer: customizer)
+    @discardableResult public func addRow<Cell: UITableViewCell>(_ cellClass: Cell.Type, customizer: @escaping (Int, Cell) -> Void) -> MultiSectionRow<Cell> {
+        let row = MultiSectionRow(cellClass: cellClass, customizer: customizer)
+        rows.append(row)
+        return row
+    }
+
+    
+    /// Adds a row for each of the items returned by the array provider
+    @discardableResult public func addRows<Cell: UITableViewCell>(_ rowCount: @escaping (Int) -> Int, cellClass: Cell.Type, customizer: @escaping (Path, Cell) -> Void) -> MultiSectionMultiRow<Cell> {
+        let row = MultiSectionMultiRow(cellClass: cellClass, rowCount: rowCount, customizer: customizer)
         rows.append(row)
         return row
     }
@@ -27,7 +37,15 @@ public class MultipleSectionDescriptor {
     }
 
     func rowAtIndex(_ rowIndex: Int, forSection sectionIndex: Int) -> Row {
-        return RowProxy(index: sectionIndex, row: rows[rowIndex])
+        var currentIndex = 0
+        for provider in rows {
+            let startIndex = currentIndex
+            currentIndex += provider.rowCount(section: sectionIndex)
+            if currentIndex > rowIndex {
+                return RowProxy(index: sectionIndex, rowIndex: rowIndex - startIndex, row: provider)
+            }
+        }
+        fatalError("Row index exceeds row count")
     }
 
     func headerForSectionAtIndex(_ index: Int) -> Header? {
@@ -64,7 +82,9 @@ struct SectionProxy {
 extension SectionProxy: Section {
 
     var rowCount: Int {
-        return parent.rows.count
+        return parent.rows.reduce(0, { (count, row) -> Int in
+            count + row.rowCount(section: sectionIndex)
+        })
     }
 
     var header: Header? {
@@ -76,58 +96,18 @@ extension SectionProxy: Section {
     }
 }
 
-protocol AnyMultipleSectionRow {
-
-    var cellClass: AnyUITableViewCellClass { get }
-
-    func customize(_ cell: UITableViewCell, input: Int)
-    func heightForRowAtIndex(_ index: Int) -> CGFloat
-}
-
-/// Row Descriptor
-public class MultipleSectionRow<T: UITableViewCell> {
-
-    let cellClass: AnyUITableViewCellClass
-    let customizer: (Int, T) -> Void
-    var height: Provider<CGFloat, Int> = .static(44)
-
-    init(cellClass: AnyUITableViewCellClass, customizer: @escaping (Int, T) -> Void) {
-        self.cellClass = cellClass
-        self.customizer = customizer
-    }
-
-    public func with(height: @escaping (Int) -> CGFloat) {
-        self.height = .dynamic(height)
-    }
-
-    public func with(height: CGFloat) {
-        self.height = .static(height)
-    }
-}
-
-extension MultipleSectionRow: AnyMultipleSectionRow {
-
-    func customize(_ cell: UITableViewCell, input: Int) {
-        guard let cell = cell as? T else { return }
-        customizer(input, cell)
-    }
-
-    func heightForRowAtIndex(_ index: Int) -> CGFloat {
-        return height.value(index)
-    }
-}
-
 /// Row Proxy
 struct RowProxy {
 
     let index: Int
+    let rowIndex: Int
     let row: AnyMultipleSectionRow
 }
 
 extension RowProxy: Row {
 
     var height: CGFloat {
-        return row.heightForRowAtIndex(index)
+        return row.heightForRow(section: index, row: rowIndex)
     }
 
     var cellClass: AnyUITableViewCellClass {
@@ -135,7 +115,7 @@ extension RowProxy: Row {
     }
 
     func customizeCell(_ cell: UITableViewCell) {
-        row.customize(cell, input: index)
+        row.customize(cell, section: index, row: rowIndex)
     }
 
     func didSelectRow() {
