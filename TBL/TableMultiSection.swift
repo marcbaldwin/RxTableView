@@ -90,6 +90,10 @@ extension MultipleSectionDescriptor: SectionProvider {
     func heightForCellAt(section: Int, row: Int) -> CGFloat {
         return rowAtIndex(row, forSection: section).height
     }
+
+    func onCellSelectedAt(section: Int, row: Int) {
+        rowAtIndex(row, forSection: section).didSelectRow()
+    }
 }
 
 /// Section Proxy
@@ -103,10 +107,6 @@ extension SectionProxy: Section {
 
     var header: Header? {
         return parent.headerForSectionAtIndex(sectionIndex)
-    }
-
-    func rowAtIndex(_ index: Int) -> Row {
-        return parent.rowAtIndex(index, forSection: sectionIndex)
     }
 }
 

@@ -55,6 +55,10 @@ extension SingleSectionDescriptor: SectionProvider {
     func customize(_ cell: UITableViewCell, section: Int, row: Int) {
         rowAtIndex(row).customizeCell(cell)
     }
+
+    func onCellSelectedAt(section: Int, row: Int) {
+        rowAtIndex(row).didSelectRow()
+    }
 }
 
 extension SingleSectionDescriptor: Section {

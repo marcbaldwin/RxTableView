@@ -6,10 +6,6 @@ class TableViewDataSourceDelegate: NSObject {
     init(sectionProvider: SectionProvider) {
         self.sectionProvider = sectionProvider
     }
-
-    fileprivate func rowAtIndexPath(_ indexPath: IndexPath) -> Row {
-        return sectionProvider.sectionAtIndex(indexPath.section).rowAtIndex(indexPath.row)
-    }
 }
 
 extension TableViewDataSourceDelegate: UITableViewDataSource {
@@ -41,6 +37,12 @@ extension TableViewDataSourceDelegate: UITableViewDelegate {
         return sectionProvider.heightForCellAt(section: indexPath.section, row: indexPath.row)
     }
 
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        sectionProvider.onCellSelectedAt(section: indexPath.section, row: indexPath.row)
+    }
+
+    // MARK: Header
+
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return sectionProvider.sectionAtIndex(section).header?.createHeader()
     }
@@ -52,9 +54,5 @@ extension TableViewDataSourceDelegate: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return sectionProvider.sectionAtIndex(section).header?.height ?? 0
-    }
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        rowAtIndexPath(indexPath).didSelectRow()
     }
 }
