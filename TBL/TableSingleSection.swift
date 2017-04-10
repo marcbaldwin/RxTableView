@@ -47,6 +47,10 @@ extension SingleSectionDescriptor: SectionProvider {
     func classForCellAt(section: Int, row: Int) -> AnyUITableViewCellClass {
         return rowAtIndex(row).cellClass
     }
+
+    func heightForCellAt(section: Int, row: Int) -> CGFloat {
+        return rowAtIndex(row).height
+    }
 }
 
 extension SingleSectionDescriptor: Section {

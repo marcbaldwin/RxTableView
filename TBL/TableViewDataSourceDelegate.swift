@@ -38,7 +38,7 @@ extension TableViewDataSourceDelegate: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return rowAtIndexPath(indexPath).height
+        return sectionProvider.heightForCellAt(section: indexPath.section, row: indexPath.row)
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
