@@ -40,13 +40,13 @@ public class MultipleSectionDescriptor {
     // MARK: Internal
     //
 
-    func rowAtIndex(_ rowIndex: Int, forSection sectionIndex: Int) -> Row {
+    func rowAtIndex(_ rowIndex: Int, forSection sectionIndex: Int) -> (AnyMultipleSectionRow, Int) {
         var currentIndex = 0
         for provider in rows {
             let startIndex = currentIndex
             currentIndex += provider.rowCount(section: sectionIndex)
             if currentIndex > rowIndex {
-                return RowProxy(index: sectionIndex, rowIndex: rowIndex - startIndex, row: provider)
+                return (provider, rowIndex - startIndex)
             }
         }
         fatalError("Row index exceeds row count")
@@ -76,46 +76,22 @@ extension MultipleSectionDescriptor: SectionProvider {
     }
 
     func classForCellAt(section: Int, row: Int) -> AnyUITableViewCellClass {
-        return rowAtIndex(row, forSection: section).cellClass
+        return rowAtIndex(row, forSection: section).0.cellClass
     }
 
     func customize(_ cell: UITableViewCell, section: Int, row: Int) {
-        rowAtIndex(row, forSection: section).customizeCell(cell)
+        let rowPath = rowAtIndex(row, forSection: section)
+        return rowPath.0.customize(cell, section: section, row: rowPath.1)
     }
 
     func heightForCellAt(section: Int, row: Int) -> CGFloat {
-        return rowAtIndex(row, forSection: section).height
+        let rowPath = rowAtIndex(row, forSection: section)
+        return rowPath.0.heightForRow(section: section, row: rowPath.1)
     }
 
     func onCellSelectedAt(section: Int, row: Int) {
-        rowAtIndex(row, forSection: section).didSelectRow()
-    }
-}
-
-/// Row Proxy
-struct RowProxy {
-
-    let index: Int
-    let rowIndex: Int
-    let row: AnyMultipleSectionRow
-}
-
-extension RowProxy: Row {
-
-    var height: CGFloat {
-        return row.heightForRow(section: index, row: rowIndex)
-    }
-
-    var cellClass: AnyUITableViewCellClass {
-        return row.cellClass
-    }
-
-    func customizeCell(_ cell: UITableViewCell) {
-        row.customize(cell, section: index, row: rowIndex)
-    }
-
-    func didSelectRow() {
-        row.onCellSelectedAt(section: index, row: rowIndex)
+        let rowPath = rowAtIndex(row, forSection: section)
+        rowPath.0.onCellSelectedAt(section: section, row: rowPath.1)
     }
 }
 

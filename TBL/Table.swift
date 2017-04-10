@@ -19,16 +19,6 @@ protocol SectionProvider {
     func onCellSelectedAt(section: Int, row: Int)
 }
 
-/// Describes a row in a table
-protocol Row {
-
-    var cellClass: AnyUITableViewCellClass { get }
-    var height: CGFloat { get }
-
-    func customizeCell(_ cell: UITableViewCell)
-    func didSelectRow()
-}
-
 protocol Header {
 
     var height: CGFloat { get }
