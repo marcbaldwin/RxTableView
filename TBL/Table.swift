@@ -10,13 +10,13 @@ protocol SectionProvider {
     var cellClasses: [AnyUITableViewCellClass] { get }
     var sectionCount: Int { get }
 
+    func headerFor(_ section: Int) -> Header?
+
     func numberOfRowsIn(_ section: Int) -> Int
     func classForCellAt(section: Int, row: Int) -> AnyUITableViewCellClass
     func heightForCellAt(section: Int, row: Int) -> CGFloat
     func customize(_ cell: UITableViewCell, section: Int, row: Int)
     func onCellSelectedAt(section: Int, row: Int)
-
-    func sectionAtIndex(_ index: Int) -> Section
 }
 
 /// Provides rows to be displayed in a table
@@ -26,12 +26,6 @@ protocol RowProvider {
     var rowCount: Int { get }
 
     func rowAtIndex(_ index: Int) -> Row
-}
-
-/// Describes a section of a table
-protocol Section {
-
-    var header: Header? { get }
 }
 
 /// Describes a row in a table
@@ -109,6 +103,11 @@ extension Table: SectionProvider {
         return sectionProviders.reduce(0) { $0 + $1.sectionCount }
     }
 
+    func headerFor(_ section: Int) -> Header? {
+        let sectionOffset = sectionProviderAt(section)
+        return sectionOffset.0.headerFor(sectionOffset.1)
+    }
+
     func numberOfRowsIn(_ section: Int) -> Int {
         let sectionOffset = sectionProviderAt(section)
         return sectionOffset.0.numberOfRowsIn(sectionOffset.1)
@@ -132,18 +131,5 @@ extension Table: SectionProvider {
     func onCellSelectedAt(section: Int, row: Int) {
         let sectionOffset = sectionProviderAt(section)
         sectionOffset.0.onCellSelectedAt(section: sectionOffset.1, row: row)
-    }
-
-    func sectionAtIndex(_ index: Int) -> Section {
-        var currentSection = 0
-        for sectionProvider in sectionProviders {
-            let sectionStartIndex = currentSection
-            currentSection += sectionProvider.sectionCount
-            if currentSection > index {
-                let sectionIndex = (index - sectionStartIndex)
-                return sectionProvider.sectionAtIndex(sectionIndex)
-            }
-        }
-        fatalError("Section index exceeds section count")
     }
 }

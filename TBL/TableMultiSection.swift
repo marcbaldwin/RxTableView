@@ -51,14 +51,6 @@ public class MultipleSectionDescriptor {
         }
         fatalError("Row index exceeds row count")
     }
-
-    func headerForSectionAtIndex(_ index: Int) -> Header? {
-        if let header = header {
-            return MultipleSectionHeaderProxy(index: index, header: header)
-        } else {
-            return nil
-        }
-    }
 }
 
 extension MultipleSectionDescriptor: SectionProvider {
@@ -71,8 +63,12 @@ extension MultipleSectionDescriptor: SectionProvider {
         return sectionCountProvider()
     }
 
-    func sectionAtIndex(_ index: Int) -> Section {
-        return SectionProxy(sectionIndex: index, parent: self)
+    func headerFor(_ section: Int) -> Header? {
+        if let header = header {
+            return MultipleSectionHeaderProxy(index: section, header: header)
+        } else {
+            return nil
+        }
     }
 
     func numberOfRowsIn(_ section: Int) -> Int {
@@ -93,20 +89,6 @@ extension MultipleSectionDescriptor: SectionProvider {
 
     func onCellSelectedAt(section: Int, row: Int) {
         rowAtIndex(row, forSection: section).didSelectRow()
-    }
-}
-
-/// Section Proxy
-struct SectionProxy {
-
-    let sectionIndex: Int
-    let parent: MultipleSectionDescriptor
-}
-
-extension SectionProxy: Section {
-
-    var header: Header? {
-        return parent.headerForSectionAtIndex(sectionIndex)
     }
 }
 

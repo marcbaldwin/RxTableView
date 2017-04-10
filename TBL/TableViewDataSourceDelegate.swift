@@ -23,7 +23,7 @@ extension TableViewDataSourceDelegate: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sectionProvider.sectionAtIndex(section).header != nil ? "A" : nil
+        return sectionProvider.headerFor(section) != nil ? "A" : nil
     }
 }
 
@@ -44,15 +44,15 @@ extension TableViewDataSourceDelegate: UITableViewDelegate {
     // MARK: Header
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return sectionProvider.sectionAtIndex(section).header?.createHeader()
+        return sectionProvider.headerFor(section)?.createHeader()
     }
 
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        guard let header = sectionProvider.sectionAtIndex(section).header else { return }
+        guard let header = sectionProvider.headerFor(section) else { return }
         header.customizeHeader(view)
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return sectionProvider.sectionAtIndex(section).header?.height ?? 0
+        return sectionProvider.headerFor(section)?.height ?? 0
     }
 }

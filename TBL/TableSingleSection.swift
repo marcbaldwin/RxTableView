@@ -38,7 +38,9 @@ extension SingleSectionDescriptor: SectionProvider {
 
     var sectionCount: Int { return 1 }
 
-    func sectionAtIndex(_ index: Int) -> Section { return self }
+    func headerFor(_ section: Int) -> Header? {
+        return header
+    }
 
     func numberOfRowsIn(_ section: Int) -> Int {
         return rowProviders.reduce(0) { $0 + $1.rowCount }
@@ -59,11 +61,8 @@ extension SingleSectionDescriptor: SectionProvider {
     func onCellSelectedAt(section: Int, row: Int) {
         rowAtIndex(row).didSelectRow()
     }
-}
 
-extension SingleSectionDescriptor: Section {
-
-    func rowAtIndex(_ index: Int) -> Row {
+    private func rowAtIndex(_ index: Int) -> Row {
         var currentIndex = 0
         for provider in rowProviders {
             let startIndex = currentIndex
