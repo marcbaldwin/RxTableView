@@ -19,15 +19,6 @@ protocol SectionProvider {
     func onCellSelectedAt(section: Int, row: Int)
 }
 
-/// Provides rows to be displayed in a table
-protocol RowProvider {
-
-    var cellClasses: [AnyUITableViewCellClass] { get }
-    var rowCount: Int { get }
-
-    func rowAtIndex(_ index: Int) -> Row
-}
-
 /// Describes a row in a table
 protocol Row {
 

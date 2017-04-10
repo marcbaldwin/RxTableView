@@ -3,6 +3,7 @@
 protocol SingleSectionRowDelegate {
 
     var cellClass: AnyUITableViewCellClass { get }
+    var rowCount: Int { get }
 
     func customizeCell(_ cell: UITableViewCell, atIndex index: Int)
     func heightForRowAtIndex(_ index: Int) -> CGFloat
@@ -13,7 +14,7 @@ protocol SingleSectionRowDelegate {
 public class SingleSectionDescriptor {
 
     var header: Header? = nil
-    fileprivate var rowProviders = [RowProvider]()
+    fileprivate var rowProviders = [SingleSectionRowDelegate]()
 
     /// Adds a single row to this section
     @discardableResult public func addRow<C: UITableViewCell>(_ cellClass: C.Type, customizer: @escaping (C) -> Void) -> SingleSectionRow<C> {
@@ -33,7 +34,7 @@ public class SingleSectionDescriptor {
 extension SingleSectionDescriptor: SectionProvider {
 
     var cellClasses: [AnyUITableViewCellClass] {
-        return rowProviders.reduce([AnyUITableViewCellClass]()) { $0 + $1.cellClasses }
+        return rowProviders.reduce([AnyUITableViewCellClass]()) { $0 + [$1.cellClass] }
     }
 
     var sectionCount: Int { return 1 }
@@ -47,29 +48,33 @@ extension SingleSectionDescriptor: SectionProvider {
     }
 
     func classForCellAt(section: Int, row: Int) -> AnyUITableViewCellClass {
-        return rowAtIndex(row).cellClass
+        let rowOffset = rowAtIndex(row)
+        return rowOffset.0.cellClass
     }
 
     func heightForCellAt(section: Int, row: Int) -> CGFloat {
-        return rowAtIndex(row).height
+        let rowOffset = rowAtIndex(row)
+        return rowOffset.0.heightForRowAtIndex(rowOffset.1)
     }
 
     func customize(_ cell: UITableViewCell, section: Int, row: Int) {
-        rowAtIndex(row).customizeCell(cell)
+        let rowOffset = rowAtIndex(row)
+        return rowOffset.0.customizeCell(cell, atIndex: rowOffset.1)
     }
 
     func onCellSelectedAt(section: Int, row: Int) {
-        rowAtIndex(row).didSelectRow()
+        let rowOffset = rowAtIndex(row)
+        rowOffset.0.onSelectCellAtIndex(rowOffset.1)
     }
 
-    private func rowAtIndex(_ index: Int) -> Row {
+    private func rowAtIndex(_ index: Int) -> (SingleSectionRowDelegate, Int) {
         var currentIndex = 0
         for provider in rowProviders {
             let startIndex = currentIndex
             currentIndex += provider.rowCount
             if currentIndex > index {
                 let rowIndex = (index - startIndex)
-                return provider.rowAtIndex(rowIndex)
+                return (provider, rowIndex)
             }
         }
         fatalError("Row index exceeds row count")
@@ -112,24 +117,20 @@ public class SingleSectionRow<C: UITableViewCell>  {
     }
 }
 
-extension SingleSectionRow: RowProvider {
+extension SingleSectionRow: SingleSectionRowDelegate {
 
-    var cellClasses: [AnyUITableViewCellClass] { return [cellClass] }
     var rowCount: Int { return visible.evaluate() ? 1 : 0 }
 
-    func rowAtIndex(_ index: Int) -> Row { return self }
-}
+    func heightForRowAtIndex(_ index: Int) -> CGFloat {
+        return heightProvider.value()
+    }
 
-extension SingleSectionRow: Row {
-
-    var height: CGFloat { return heightProvider.value() }
-
-    func customizeCell(_ cell: UITableViewCell) {
+    func customizeCell(_ cell: UITableViewCell, atIndex index: Int) {
         guard let cell = cell as? C else { fatalError() }
         customizer(cell)
     }
 
-    func didSelectRow() {
+    func onSelectCellAtIndex(_ index: Int) {
         onSelect?()
     }
 }
@@ -165,17 +166,9 @@ public class SingleSectionRows<C: UITableViewCell, T> {
     }
 }
 
-extension SingleSectionRows: RowProvider {
-
-    var cellClasses: [AnyUITableViewCellClass] { return [cellClass] }
-    var rowCount: Int { return itemProvider().count }
-
-    func rowAtIndex(_ index: Int) -> Row {
-        return SingleSectionRowProxy(index: index, delegate: self)
-    }
-}
-
 extension SingleSectionRows: SingleSectionRowDelegate {
+
+    var rowCount: Int { return itemProvider().count }
 
     func customizeCell(_ cell: UITableViewCell, atIndex index: Int) {
         guard let cell = cell as? C else { fatalError() }
@@ -188,25 +181,5 @@ extension SingleSectionRows: SingleSectionRowDelegate {
 
     func onSelectCellAtIndex(_ index: Int) {
         onSelect?(item(index))
-    }
-}
-
-struct SingleSectionRowProxy {
-
-    let index: Int
-    let delegate: SingleSectionRowDelegate
-}
-
-extension SingleSectionRowProxy: Row {
-
-    var cellClass: AnyUITableViewCellClass { return delegate.cellClass }
-    var height: CGFloat { return delegate.heightForRowAtIndex(index) }
-
-    func customizeCell(_ cell: UITableViewCell) {
-        delegate.customizeCell(cell, atIndex: index)
-    }
-
-    func didSelectRow() {
-        delegate.onSelectCellAtIndex(index)
     }
 }
