@@ -75,6 +75,10 @@ extension MultipleSectionDescriptor: SectionProvider {
         return SectionProxy(sectionIndex: index, parent: self)
     }
 
+    func numberOfRowsIn(_ section: Int) -> Int {
+        return rows.reduce(0) { $0 + $1.rowCount(section: section) }
+    }
+
     func classForCellAt(section: Int, row: Int) -> AnyUITableViewCellClass {
         return rowAtIndex(row, forSection: section).cellClass
     }
@@ -88,12 +92,6 @@ struct SectionProxy {
 }
 
 extension SectionProxy: Section {
-
-    var rowCount: Int {
-        return parent.rows.reduce(0, { (count, row) -> Int in
-            count + row.rowCount(section: sectionIndex)
-        })
-    }
 
     var header: Header? {
         return parent.headerForSectionAtIndex(sectionIndex)

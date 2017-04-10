@@ -10,6 +10,7 @@ protocol SectionProvider {
     var cellClasses: [AnyUITableViewCellClass] { get }
     var sectionCount: Int { get }
 
+    func numberOfRowsIn(_ section: Int) -> Int
     func classForCellAt(section: Int, row: Int) -> AnyUITableViewCellClass
 
     func sectionAtIndex(_ index: Int) -> Section
@@ -27,7 +28,6 @@ protocol RowProvider {
 /// Describes a section of a table
 protocol Section {
 
-    var rowCount: Int { get }
     var header: Header? { get }
 
     func rowAtIndex(_ index: Int) -> Row
@@ -106,6 +106,11 @@ extension Table: SectionProvider {
 
     var sectionCount: Int {
         return sectionProviders.reduce(0) { $0 + $1.sectionCount }
+    }
+
+    func numberOfRowsIn(_ section: Int) -> Int {
+        let sectionOffset = sectionProviderAt(section)
+        return sectionOffset.0.numberOfRowsIn(sectionOffset.1)
     }
 
     func classForCellAt(section: Int, row: Int) -> AnyUITableViewCellClass {

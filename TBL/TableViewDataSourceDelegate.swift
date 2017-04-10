@@ -19,7 +19,7 @@ extension TableViewDataSourceDelegate: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sectionProvider.sectionAtIndex(section).rowCount
+        return sectionProvider.numberOfRowsIn(section)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
