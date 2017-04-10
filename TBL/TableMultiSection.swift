@@ -83,6 +83,10 @@ extension MultipleSectionDescriptor: SectionProvider {
         return rowAtIndex(row, forSection: section).cellClass
     }
 
+    func customize(_ cell: UITableViewCell, section: Int, row: Int) {
+        rowAtIndex(row, forSection: section).customizeCell(cell)
+    }
+
     func heightForCellAt(section: Int, row: Int) -> CGFloat {
         return rowAtIndex(row, forSection: section).height
     }

@@ -34,7 +34,7 @@ extension TableViewDataSourceDelegate: UITableViewDataSource {
 extension TableViewDataSourceDelegate: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        rowAtIndexPath(indexPath).customizeCell(cell)
+        sectionProvider.customize(cell, section: indexPath.section, row: indexPath.row)
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

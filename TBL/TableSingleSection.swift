@@ -51,6 +51,10 @@ extension SingleSectionDescriptor: SectionProvider {
     func heightForCellAt(section: Int, row: Int) -> CGFloat {
         return rowAtIndex(row).height
     }
+
+    func customize(_ cell: UITableViewCell, section: Int, row: Int) {
+        rowAtIndex(row).customizeCell(cell)
+    }
 }
 
 extension SingleSectionDescriptor: Section {

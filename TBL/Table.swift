@@ -13,6 +13,7 @@ protocol SectionProvider {
     func numberOfRowsIn(_ section: Int) -> Int
     func classForCellAt(section: Int, row: Int) -> AnyUITableViewCellClass
     func heightForCellAt(section: Int, row: Int) -> CGFloat
+    func customize(_ cell: UITableViewCell, section: Int, row: Int)
 
     func sectionAtIndex(_ index: Int) -> Section
 }
@@ -122,6 +123,11 @@ extension Table: SectionProvider {
     func heightForCellAt(section: Int, row: Int) -> CGFloat {
         let sectionOffset = sectionProviderAt(section)
         return sectionOffset.0.heightForCellAt(section: sectionOffset.1, row: row)
+    }
+
+    func customize(_ cell: UITableViewCell, section: Int, row: Int) {
+        let sectionOffset = sectionProviderAt(section)
+        sectionOffset.0.customize(cell, section: sectionOffset.1, row: row)
     }
 
     func sectionAtIndex(_ index: Int) -> Section {
