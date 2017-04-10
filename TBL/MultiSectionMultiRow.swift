@@ -7,6 +7,7 @@ public class MultiSectionMultiRow<Cell: UITableViewCell> {
     let rowCount: (Int) -> Int
     let customizer: (Path, Cell) -> Void
     var height: Provider<CGFloat, Path> = .static(44)
+    var selectionHandler: ((Path) -> Void)? = nil
 
     init(cellClass: AnyUITableViewCellClass, rowCount: @escaping (Int) -> Int, customizer: @escaping (Path, Cell) -> Void) {
         self.cellClass = cellClass
@@ -25,6 +26,12 @@ public class MultiSectionMultiRow<Cell: UITableViewCell> {
         self.height = .static(height)
         return self
     }
+
+    @discardableResult
+    public func onSelect(_ handler: @escaping (Path) -> Void) -> Self {
+        self.selectionHandler = handler
+        return self
+    }
 }
 
 extension MultiSectionMultiRow: AnyMultipleSectionRow {
@@ -40,5 +47,9 @@ extension MultiSectionMultiRow: AnyMultipleSectionRow {
 
     func heightForRow(section: Int, row: Int) -> CGFloat {
         return height.value((section, row))
+    }
+
+    func onCellSelectedAt(section: Int, row: Int) {
+        selectionHandler?((section, row))
     }
 }

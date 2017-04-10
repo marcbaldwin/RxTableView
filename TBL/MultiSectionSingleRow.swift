@@ -35,4 +35,8 @@ extension MultiSectionRow: AnyMultipleSectionRow {
     func heightForRow(section: Int, row: Int) -> CGFloat {
         return height.value(section)
     }
+
+    func onCellSelectedAt(section: Int, row: Int) {
+        fatalError("Not yet implemented")
+    }
 }

@@ -119,7 +119,7 @@ extension RowProxy: Row {
     }
 
     func didSelectRow() {
-        
+        row.onCellSelectedAt(section: index, row: rowIndex)
     }
 }
 
