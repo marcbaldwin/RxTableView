@@ -10,6 +10,8 @@ protocol SectionProvider {
     var cellClasses: [AnyUITableViewCellClass] { get }
     var sectionCount: Int { get }
 
+    func classForCellAt(section: Int, row: Int) -> AnyUITableViewCellClass
+
     func sectionAtIndex(_ index: Int) -> Section
 }
 
@@ -79,6 +81,21 @@ open class Table {
         tableView.dataSource = dataSourceDelegate
         tableView.delegate = dataSourceDelegate
     }
+
+    //
+    // Private
+    //
+    fileprivate func sectionProviderAt(_ index: Int) -> (SectionProvider, Int) {
+        var currentSection = 0
+        for sectionProvider in sectionProviders {
+            let sectionStartIndex = currentSection
+            currentSection += sectionProvider.sectionCount
+            if currentSection > index {
+                return (sectionProvider, index - sectionStartIndex)
+            }
+        }
+        fatalError("Section index exceeds section count")
+    }
 }
 
 extension Table: SectionProvider {
@@ -89,6 +106,11 @@ extension Table: SectionProvider {
 
     var sectionCount: Int {
         return sectionProviders.reduce(0) { $0 + $1.sectionCount }
+    }
+
+    func classForCellAt(section: Int, row: Int) -> AnyUITableViewCellClass {
+        let sectionOffset = sectionProviderAt(section)
+        return sectionOffset.0.classForCellAt(section: sectionOffset.1, row: row)
     }
 
     func sectionAtIndex(_ index: Int) -> Section {

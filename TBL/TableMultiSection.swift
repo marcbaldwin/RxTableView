@@ -36,6 +36,10 @@ public class MultipleSectionDescriptor {
         return header
     }
 
+    //
+    // MARK: Internal
+    //
+
     func rowAtIndex(_ rowIndex: Int, forSection sectionIndex: Int) -> Row {
         var currentIndex = 0
         for provider in rows {
@@ -69,6 +73,10 @@ extension MultipleSectionDescriptor: SectionProvider {
 
     func sectionAtIndex(_ index: Int) -> Section {
         return SectionProxy(sectionIndex: index, parent: self)
+    }
+
+    func classForCellAt(section: Int, row: Int) -> AnyUITableViewCellClass {
+        return rowAtIndex(row, forSection: section).cellClass
     }
 }
 

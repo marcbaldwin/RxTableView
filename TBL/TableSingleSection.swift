@@ -39,6 +39,10 @@ extension SingleSectionDescriptor: SectionProvider {
     var sectionCount: Int { return 1 }
 
     func sectionAtIndex(_ index: Int) -> Section { return self }
+
+    func classForCellAt(section: Int, row: Int) -> AnyUITableViewCellClass {
+        return rowAtIndex(row).cellClass
+    }
 }
 
 extension SingleSectionDescriptor: Section {

@@ -23,7 +23,7 @@ extension TableViewDataSourceDelegate: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return tableView.dequeueReusableCellForClass(rowAtIndexPath(indexPath).cellClass)
+        return tableView.dequeueReusableCellForClass(sectionProvider.classForCellAt(section: indexPath.section, row: indexPath.row))
     }
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
