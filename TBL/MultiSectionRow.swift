@@ -6,6 +6,7 @@ public class MultiSectionRow<C: UITableViewCell> {
     let cellClass: AnyUITableViewCellClass
     let customizer: (Int, C) -> Void
     var height: Provider<CGFloat, Int> = .static(44)
+    var selectionHandler: ((Int) -> Void)? = nil
 
     init(cellClass: AnyUITableViewCellClass, customizer: @escaping (Int, C) -> Void) {
         self.cellClass = cellClass
@@ -18,6 +19,12 @@ public class MultiSectionRow<C: UITableViewCell> {
 
     public func with(height: CGFloat) {
         self.height = .static(height)
+    }
+
+    @discardableResult
+    public func onSelect(_ handler: @escaping (Int) -> Void) -> Self {
+        self.selectionHandler = handler
+        return self
     }
 }
 
@@ -37,6 +44,6 @@ extension MultiSectionRow: AnyMultipleSectionRow {
     }
 
     func onCellSelectedAt(section: Int, row: Int) {
-        fatalError("Not yet implemented")
+        selectionHandler?(section)
     }
 }
