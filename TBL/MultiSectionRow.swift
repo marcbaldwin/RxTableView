@@ -28,7 +28,7 @@ extension MultiSectionRow: AnyMultipleSectionRow {
     }
 
     func customize(_ cell: UITableViewCell, section: Int, row: Int) {
-        guard let cell = cell as? C else { return }
+        guard let cell = cell as? C else { fatalError() }
         customizer(section, cell)
     }
 

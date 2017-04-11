@@ -1,7 +1,7 @@
 import Foundation
 
 // Row descriptor for creating multiple rows for multiple sections
-public class MultiSectionMultiRow<Cell: UITableViewCell> {
+public class MultiSectionRows<Cell: UITableViewCell> {
 
     let cellClass: AnyUITableViewCellClass
     let rowCount: (Int) -> Int
@@ -34,14 +34,14 @@ public class MultiSectionMultiRow<Cell: UITableViewCell> {
     }
 }
 
-extension MultiSectionMultiRow: AnyMultipleSectionRow {
+extension MultiSectionRows: AnyMultipleSectionRow {
 
     func rowCount(section: Int) -> Int {
         return self.rowCount(section)
     }
 
     func customize(_ cell: UITableViewCell, section: Int, row: Int) {
-        guard let cell = cell as? Cell else { return }
+        guard let cell = cell as? Cell else { fatalError() }
         customizer((section, row), cell)
     }
 

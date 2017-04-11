@@ -7,11 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A08890441E9C06BD002AE93A /* MultiSectionMultiRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08890431E9C06BD002AE93A /* MultiSectionMultiRow.swift */; };
+		A08890441E9C06BD002AE93A /* MultiSectionRows.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08890431E9C06BD002AE93A /* MultiSectionRows.swift */; };
 		A08890461E9C0A13002AE93A /* MultiSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08890451E9C0A13002AE93A /* MultiSection.swift */; };
-		A08890481E9C0AFA002AE93A /* MultiSectionSingleRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08890471E9C0AFA002AE93A /* MultiSectionSingleRow.swift */; };
-		A08B1D681D2C4FAC004D3D54 /* TableSingleSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08B1D671D2C4FAC004D3D54 /* TableSingleSection.swift */; };
-		A08B1D6A1D2C4FE9004D3D54 /* TableMultiSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08B1D691D2C4FE9004D3D54 /* TableMultiSection.swift */; };
+		A08890481E9C0AFA002AE93A /* MultiSectionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08890471E9C0AFA002AE93A /* MultiSectionRow.swift */; };
+		A088904B1E9CD7BA002AE93A /* SingleSectionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A088904A1E9CD7BA002AE93A /* SingleSectionRow.swift */; };
+		A088904D1E9CD80F002AE93A /* SingleSectionRows.swift in Sources */ = {isa = PBXBuildFile; fileRef = A088904C1E9CD80F002AE93A /* SingleSectionRows.swift */; };
+		A08B1D681D2C4FAC004D3D54 /* SingleSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08B1D671D2C4FAC004D3D54 /* SingleSection.swift */; };
 		A0CBD9E71D2AD93E00FBF12A /* TBL.h in Headers */ = {isa = PBXBuildFile; fileRef = A0CBD9E61D2AD93E00FBF12A /* TBL.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A0CBD9EE1D2AD93E00FBF12A /* TBL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0CBD9E31D2AD93E00FBF12A /* TBL.framework */; };
 		A0CBD9F31D2AD93E00FBF12A /* TBLTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CBD9F21D2AD93E00FBF12A /* TBLTests.swift */; };
@@ -32,11 +33,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A08890431E9C06BD002AE93A /* MultiSectionMultiRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiSectionMultiRow.swift; sourceTree = "<group>"; };
+		A08890431E9C06BD002AE93A /* MultiSectionRows.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiSectionRows.swift; sourceTree = "<group>"; };
 		A08890451E9C0A13002AE93A /* MultiSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiSection.swift; sourceTree = "<group>"; };
-		A08890471E9C0AFA002AE93A /* MultiSectionSingleRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiSectionSingleRow.swift; sourceTree = "<group>"; };
-		A08B1D671D2C4FAC004D3D54 /* TableSingleSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableSingleSection.swift; sourceTree = "<group>"; };
-		A08B1D691D2C4FE9004D3D54 /* TableMultiSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableMultiSection.swift; sourceTree = "<group>"; };
+		A08890471E9C0AFA002AE93A /* MultiSectionRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiSectionRow.swift; sourceTree = "<group>"; };
+		A088904A1E9CD7BA002AE93A /* SingleSectionRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleSectionRow.swift; sourceTree = "<group>"; };
+		A088904C1E9CD80F002AE93A /* SingleSectionRows.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleSectionRows.swift; sourceTree = "<group>"; };
+		A08B1D671D2C4FAC004D3D54 /* SingleSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleSection.swift; sourceTree = "<group>"; };
 		A0CBD9E31D2AD93E00FBF12A /* TBL.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TBL.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0CBD9E61D2AD93E00FBF12A /* TBL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TBL.h; sourceTree = "<group>"; };
 		A0CBD9E81D2AD93E00FBF12A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -72,11 +74,20 @@
 			isa = PBXGroup;
 			children = (
 				A08890451E9C0A13002AE93A /* MultiSection.swift */,
-				A08890431E9C06BD002AE93A /* MultiSectionMultiRow.swift */,
-				A08890471E9C0AFA002AE93A /* MultiSectionSingleRow.swift */,
-				A08B1D691D2C4FE9004D3D54 /* TableMultiSection.swift */,
+				A08890431E9C06BD002AE93A /* MultiSectionRows.swift */,
+				A08890471E9C0AFA002AE93A /* MultiSectionRow.swift */,
 			);
 			name = MultiSection;
+			sourceTree = "<group>";
+		};
+		A08890491E9CD770002AE93A /* SingleSection */ = {
+			isa = PBXGroup;
+			children = (
+				A08B1D671D2C4FAC004D3D54 /* SingleSection.swift */,
+				A088904A1E9CD7BA002AE93A /* SingleSectionRow.swift */,
+				A088904C1E9CD80F002AE93A /* SingleSectionRows.swift */,
+			);
+			name = SingleSection;
 			sourceTree = "<group>";
 		};
 		A0CBD9D91D2AD93E00FBF12A = {
@@ -127,10 +138,10 @@
 		A0CBDA001D2AD97300FBF12A /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				A08890491E9CD770002AE93A /* SingleSection */,
 				A08890421E9C068F002AE93A /* MultiSection */,
 				A0CBDA051D2ADCB100FBF12A /* Types.swift */,
 				A0CBD9FD1D2AD96A00FBF12A /* Table.swift */,
-				A08B1D671D2C4FAC004D3D54 /* TableSingleSection.swift */,
 				A0CBDA011D2AD9B700FBF12A /* TableViewDataSourceDelegate.swift */,
 				A0CBDA031D2ADA9E00FBF12A /* UITableViewExtensions.swift */,
 			);
@@ -248,14 +259,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				A0CBDA061D2ADCB100FBF12A /* Types.swift in Sources */,
+				A088904D1E9CD80F002AE93A /* SingleSectionRows.swift in Sources */,
 				A0CBDA041D2ADA9E00FBF12A /* UITableViewExtensions.swift in Sources */,
-				A08B1D6A1D2C4FE9004D3D54 /* TableMultiSection.swift in Sources */,
-				A08890481E9C0AFA002AE93A /* MultiSectionSingleRow.swift in Sources */,
+				A088904B1E9CD7BA002AE93A /* SingleSectionRow.swift in Sources */,
+				A08890481E9C0AFA002AE93A /* MultiSectionRow.swift in Sources */,
 				A0CBDA021D2AD9B700FBF12A /* TableViewDataSourceDelegate.swift in Sources */,
 				A0CBD9FE1D2AD96A00FBF12A /* Table.swift in Sources */,
 				A08890461E9C0A13002AE93A /* MultiSection.swift in Sources */,
-				A08B1D681D2C4FAC004D3D54 /* TableSingleSection.swift in Sources */,
-				A08890441E9C06BD002AE93A /* MultiSectionMultiRow.swift in Sources */,
+				A08B1D681D2C4FAC004D3D54 /* SingleSection.swift in Sources */,
+				A08890441E9C06BD002AE93A /* MultiSectionRows.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
